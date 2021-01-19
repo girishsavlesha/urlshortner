@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <main id="app">
@@ -14,7 +15,7 @@
         <div class="title">
             <h1>themustardcat</h1>
         </div>
-        <form @submit.prevent="createNoob()">
+        <form @submit.prevent="createUrl()">
             <div class="label-wrap">
                 <label for="url">Url</label>
             </div>
@@ -25,11 +26,10 @@
                 <label for="slug">slug</label>
             </div>
             <div class="input-wrap">
-                <input type="slug" name="" v-model="name" id="" placeholder="catchy-phrase" required>
+                <input  name="slug" v-model="slug" id="" placeholder="catchy-phrase">
             </div>
             <div class="btn-wrap">
-
-                <button class="btnShrink" onclick="getData()" type="submit">
+                <button class="btnShrink" type="submit">
                     <div class="txt">Shrink</div>
                     <svg class="svg--template loader">
                         <circle class="circle1" stroke="none" stroke-width="4" fill="none" r="25" cx="25" cy="25"/>
@@ -46,45 +46,13 @@
             </div>
       
         </form>
+        <pre>
+            {{JSON.stringify(created, null, 2)}}
+        </pre>
      </div>
     </main>
-    <script>
-    var btn = document.getElementsByClassName('btnShrink')[0];
-    var loaderTemplate = document.getElementsByClassName('loader')[0];
-    var checkmarkTemplate = document.getElementsByClassName('checkmark')[0];
-
-
-    function getData(){
-        if(!btn.classList.contains('clicked')){
-        btn.classList.add('clicked');
-        var timeout1  = 600,
-        timeout2 = 2500,
-        timeout3 = 3000;
-        setTimeout(function(){
-            loaderTemplate.classList.remove('svg--template');
-            loaderTemplate.style.display = 'initial';
-        }, timeout1);
-        setTimeout(function(){
-            btn.getElementsByClassName('txt')[0].innerText="";
-            loaderTemplate.style.display = 'none';
-            checkmarkTemplate.style.display = 'initial';
-            checkmarkTemplate.classList.remove('svg--template');
-            btn.classList.add('done');
-        }, timeout1 + timeout2);
-        setTimeout(function(){
-            checkmarkTemplate.style.display = 'none';
-            checkmarkTemplate.classList.add('svg--template');
-            btn.getElementsByClassName('txt')[0].innerText="Shrink";
-            btn.classList.remove('clicked');
-            btn.classList.remove('done');
-        }, timeout1 + timeout2 + timeout3);
-    }
-    }   
-    
-    </script>
-
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-<script src="main.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/vue@2'></script>
+    <script src="main.js"></script>
 </body>
 
 </html>
