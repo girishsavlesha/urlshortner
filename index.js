@@ -57,10 +57,10 @@ app.post('/noob', async (req, res, next) => {
     let {slug, url } = req.body;
     console.log(req.body);
     try{
-        await schema.validate({
-            slug,
-            url,
-        })
+        // await schema.validate({
+        //     slug,
+        //     url,
+        // })
         if(!slug){
             slug = nanoid(5);
         }
