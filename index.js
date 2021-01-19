@@ -11,6 +11,7 @@ require('dotenv').config();
 
 const db = monk(process.env.MONGODB_URI);
 const urls = db.get('urls');
+console.log(urls);
 urls.createIndex({slug: 1 }, { unique: true });
 
 const app = express();
@@ -27,9 +28,10 @@ app.get('/:id', async (req, res, next) => {
         if(url){
             res.redirect(url.url);
         }
-        res.redirect('/?error=${slug} not found');
+        res.redirect(`/?error=${slug} not found`);
     }catch(error){
-        res.redirect('/?error=Link not found');
+        res.redirect(`/?error=Link not found`);
+        console.error(error);
     }
 })
 
@@ -38,9 +40,21 @@ const schema = yup.object().shape({
     url: yup.string().trim().url().required()
 });
 
+app.use((error, req, res, next) => {
+    if(error.status){
+        res.status(error.status);
+    }else{
+        res.status(500);
+    }
+    res.json({
+        message: error.message,
+        stack: process.env.NODE_ENV === 'production' ? 'stack': error.stack
+    })
+})
 
 app.post('/', async (req, res, next) => {
     let {slug, url } = req.body;
+    console.log(req.body);
     try{
         await schema.validate({
             slug,
@@ -67,18 +81,6 @@ app.post('/', async (req, res, next) => {
         next(error);
     }
 });
-
-app.use((error, req, res, next) => {
-    if(error.status){
-        res.status(error.status);
-    }else{
-        res.status(500);
-    }
-    res.json({
-        message: error.message,
-        stack: process.env.NODE_ENV === 'production' ? 'stack': error.stack
-    })
-})
 
 const port = process.env.PORT || 7000;
 
