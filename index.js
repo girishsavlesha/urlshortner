@@ -6,7 +6,6 @@ const monk = require('monk');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const slowDown = require('express-slow-down');
-const cors = require('cors');
 
 require('dotenv').config();
 
@@ -22,7 +21,6 @@ app.use(
     })
   );
 app.use(morgan('tiny'));
-app.use(cors());
 app.use(express.json());
 app.use(express.static('./public'));
 
