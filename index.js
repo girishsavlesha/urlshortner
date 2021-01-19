@@ -57,10 +57,10 @@ app.post('/noob', async (req, res, next) => {
     let {slug, url } = req.body;
     console.log(req.body);
     try{
-        // await schema.validate({
-        //     slug,
-        //     url,
-        // })
+        await schema.validate({
+            slug,
+            url,
+        })
         if(!slug){
             slug = nanoid(5);
         }
@@ -84,8 +84,8 @@ app.post('/noob', async (req, res, next) => {
     }
 });
 
-app.get('/test', function (req, res) {
-    res.send('hello world')
+app.post('/', function (req, res) {
+    res.send('POST request to the homepage')
   })
 
 const port = process.env.PORT || 7000;
