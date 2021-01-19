@@ -11,7 +11,7 @@ require('dotenv').config();
 
 const db = monk(process.env.MONGODB_URI);
 const urls = db.get('urls');
-console.log(urls);
+
 urls.createIndex({slug: 1 }, { unique: true });
 
 const app = express();
@@ -52,7 +52,7 @@ app.use((error, req, res, next) => {
     })
 })
 
-app.post('/', async (req, res, next) => {
+app.post('/noob', async (req, res, next) => {
     let {slug, url } = req.body;
     console.log(req.body);
     try{
@@ -81,6 +81,10 @@ app.post('/', async (req, res, next) => {
         next(error);
     }
 });
+
+app.get('/test', function (req, res) {
+    res.send('hello world')
+  })
 
 const port = process.env.PORT || 7000;
 
