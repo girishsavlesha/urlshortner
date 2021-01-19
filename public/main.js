@@ -18,7 +18,7 @@ const app = new Vue({
                 body: JSON.stringify({
                     url: this.url,
                     slug: this.slug || undefined,
-                })
+                }),
             });
            if(response.ok){
                 const result = await response.json();
@@ -29,6 +29,6 @@ const app = new Vue({
             const result = await response.json();
             this.error = result.message;
           }
-        }
-    }
+        },
+    },
 });
