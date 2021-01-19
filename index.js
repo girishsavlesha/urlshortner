@@ -39,7 +39,7 @@ const schema = yup.object().shape({
 });
 
 
-app.post('/url', async (req, res, next) => {
+app.post('/', async (req, res, next) => {
     let {slug, url } = req.body;
     try{
         await schema.validate({
