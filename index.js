@@ -67,7 +67,7 @@ app.post('/noob', async (req, res, next) => {
         else{
             const existing = await urls.findOne({ slug });
             if(existing){
-                throw new Error('Slug in user.')
+                throw new Error('Slug in use.')
             }
         }
         slug = slug.toLowerCase();
@@ -76,6 +76,7 @@ app.post('/noob', async (req, res, next) => {
             slug,
         };
         const created = await urls.insert(newURL);
+        console.log(created);
         res.json(created);
 
     }catch(error){
