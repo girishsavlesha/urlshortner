@@ -4,6 +4,8 @@ const yup = require('yup');
 const { nanoid } = require('nanoid');
 const monk = require('monk');
 const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const slowDown = require('express-slow-down');
 const cors = require('cors');
 
 require('dotenv').config();
@@ -44,13 +46,23 @@ const schema = yup.object().shape({
 });
 
 
-app.post('/url', async (req, res, next) => {
+app.post('/url', slowDown({
+    windowMs: 30 * 1000,
+    delayAfter: 1,
+    delayMs: 500,
+  }), rateLimit({
+    windowMs: 30 * 1000,
+    max: 1,
+  }), async (req, res, next) => {
     let {slug, url } = req.body;
     try{
         await schema.validate({
             slug,
             url,
         })
+        if (url.includes('cdg.sh')) {
+            throw new Error('Stop it. 🛑');
+          }
         if(!slug){
             slug = nanoid(5);
         }
