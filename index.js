@@ -22,19 +22,19 @@ app.use(express.json());
 app.use(express.static('./public'));
 
 
-// app.get('/:id', async (req, res, next) => {
-//     const { id: slug } = req.params;
-//     try{
-//         const url = await urls.findOne({ slug });
-//         if(url){
-//             res.redirect(url.url);
-//         }
-//         res.redirect(`/?error=${slug} not found`);
-//     }catch(error){
-//         res.redirect(`/?error=Link not found`);
-//         console.error(error);
-//     }
-// })
+app.get('/:id', async (req, res, next) => {
+    const { id: slug } = req.params;
+    try{
+        const url = await urls.findOne({ slug });
+        if(url){
+            res.redirect(url.url);
+        }
+        res.redirect(`/?error=${slug} not found`);
+    }catch(error){
+        res.redirect(`/?error=Link not found`);
+        console.error(error);
+    }
+})
 
 const schema = yup.object().shape({
     slug: yup.string().trim().matches(/[\w\-]/i),
