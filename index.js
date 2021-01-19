@@ -3,7 +3,7 @@ const morgan = require('morgan');
 const yup = require('yup');
 const { nanoid } = require('nanoid');
 const monk = require('monk');
-const helmet = require('helmet');
+
 const rateLimit = require('express-rate-limit');
 const slowDown = require('express-slow-down');
 
@@ -15,11 +15,6 @@ urls.createIndex({slug: 1 }, { unique: true });
 
 const app = express();
 
-app.use(
-    helmet({
-      contentSecurityPolicy: false,
-    })
-  );
 app.use(morgan('tiny'));
 app.use(express.json());
 app.use(express.static('./public'));
