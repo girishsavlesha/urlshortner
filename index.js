@@ -16,6 +16,7 @@ urls.createIndex({slug: 1 }, { unique: true });
 
 const app = express();
 
+app.enable('trust proxy');
 app.use(morgan('tiny'));
 app.use(express.json());
 app.use(express.static('./public'));
