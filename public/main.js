@@ -21,7 +21,7 @@ const app = new Vue({
            if(response.ok){
                 const result = await response.json();
                 this.formVisible = false;
-                this.created = `https://themustardcat.in/${result.slug}`;
+                this.created = `https://themustardcat.herokuapp.com/${result.slug}`;
            }
         }
     }

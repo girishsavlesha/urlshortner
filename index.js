@@ -14,7 +14,11 @@ urls.createIndex({slug: 1 }, { unique: true });
 
 const app = express();
 
-app.use(helmet());
+app.use(
+    helmet({
+      contentSecurityPolicy: false,
+    })
+  );
 app.use(morgan('tiny'));
 app.use(cors());
 app.use(express.json());
