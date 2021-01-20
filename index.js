@@ -46,14 +46,24 @@ const schema = yup.object().shape({
 
 
 
-app.post('/noob', async (req, res, next) => {
+app.post('/noob',slowDown({
+    windowMs: 30 * 1000,
+    delayAfter: 1,
+    delayMs: 500,
+  }), rateLimit({
+    windowMs: 30 * 1000,
+    max: 1,
+  }), async (req, res, next) => {
     let {slug, url } = req.body;
     console.log(req.body);
     try{
         await schema.validate({
             slug,
             url,
-        })
+        });
+        if (url.includes('themustardcat.herokuapp.com/')) {
+            throw new Error('Jyada Shana mat bann');
+          }
         if(!slug){
             slug = nanoid(5);
         }
