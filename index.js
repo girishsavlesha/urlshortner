@@ -6,6 +6,8 @@ const monk = require('monk');
 
 const rateLimit = require('express-rate-limit');
 const slowDown = require('express-slow-down');
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
 
 require('dotenv').config();
 
@@ -23,6 +25,21 @@ app.enable('trust proxy');
 app.use(morgan('tiny'));
 app.use(express.json());
 app.use(express.static('./public'));
+
+const checkJwt = jwt({
+    secret: jwksRsa.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: `https://<AUTH0_DOMAIN>/.well-known/jwks.json`
+    }),
+  
+    // Validate the audience and the issuer.
+    audience: 'https://noob.me',
+    issuer: `https://themustardcat.herokuapp.com/`,
+    algorithms: ['RS256']
+  });
+  app.use(checkJwt);
 
 
 app.get('/:id', async (req, res, next) => {
@@ -61,7 +78,7 @@ app.post('/noob',slowDown({
             slug,
             url,
         });
-        if (url.includes('themustardcat.herokuapp.com/')) {
+        if (url.includes('themustardcat.herokuapp.com')) {
             throw new Error('Jyada Shana mat bann');
           }
         if(!slug){
