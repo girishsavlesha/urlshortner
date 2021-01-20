@@ -26,20 +26,6 @@ app.use(morgan('tiny'));
 app.use(express.json());
 app.use(express.static('./public'));
 
-const checkJwt = jwt({
-    secret: jwksRsa.expressJwtSecret({
-      cache: true,
-      rateLimit: true,
-      jwksRequestsPerMinute: 5,
-      jwksUri: `https://themustardcat.herokuapp.com/.well-known/jwks.json`
-    }),
-  
-    // Validate the audience and the issuer.
-    audience: 'https://noob.me',
-    issuer: `https://themustardcat.herokuapp.com/`,
-    algorithms: ['RS256']
-  });
-  app.use(checkJwt);
 
 
 app.get('/:id', async (req, res, next) => {
@@ -61,6 +47,20 @@ const schema = yup.object().shape({
     url: yup.string().trim().url().required()
 });
 
+const checkJwt = jwt({
+    secret: jwksRsa.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: `https://dev-mnbc-nwo.us.auth0.com/.well-known/jwks.json`
+    }),
+  
+    // Validate the audience and the issuer.
+    audience: 'https://noob.me',
+    issuer: `https://dev-mnbc-nwo.us.auth0.com/`,
+    algorithms: ['RS256']
+  });
+  app.use(checkJwt);
 
 
 app.post('/noob',slowDown({
