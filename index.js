@@ -10,6 +10,9 @@ const slowDown = require('express-slow-down');
 require('dotenv').config();
 
 const db = monk(process.env.MONGODB_URI);
+db.then(() => {
+     console.log('Connected correctly to server')
+})
 const urls = db.get('urls');
 
 urls.createIndex({slug: 1 }, { unique: true });
