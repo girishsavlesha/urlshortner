@@ -68,7 +68,7 @@ app.post('/noob',slowDown({
     delayAfter: 1,
     delayMs: 500,
   }), rateLimit({
-    windowMs: 30 * 1000,
+    windowMs: 10 * 1000,
     max: 1,
   }), async (req, res, next) => {
     let {slug, url } = req.body;
@@ -78,8 +78,8 @@ app.post('/noob',slowDown({
             slug,
             url,
         });
-        if (url.includes('themustardcat.herokuapp.com')) {
-            throw new Error('Jyada Shana mat bann');
+        if (url.includes('')) {
+            throw new Error('Jyada Shana mat bann!');
           }
         if(!slug){
             slug = nanoid(5);
@@ -87,7 +87,7 @@ app.post('/noob',slowDown({
         else{
             const existing = await urls.findOne({ slug });
             if(existing){
-                throw new Error('Slug in use')
+                throw new Error('Slug in use');
             }
         }
         slug = slug.toLowerCase();
@@ -114,10 +114,6 @@ app.use((error, req, res, next) => {
         stack: process.env.NODE_ENV === 'production' ? 'stack': error.stack
     })
 })
-
-app.post('/test', function (req, res) {
-    res.send('POST request to the homepage')
-  })
 
 const port = process.env.PORT || 7000;
 
