@@ -64,7 +64,7 @@ const checkJwt = jwt({
 
 
 app.post('/noob',slowDown({
-    windowMs: 30 * 1000,
+    windowMs: 10 * 1000,
     delayAfter: 1,
     delayMs: 500,
   }), rateLimit({
