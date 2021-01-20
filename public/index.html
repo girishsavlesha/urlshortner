@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
 
 </head>
 <body>
@@ -14,6 +15,7 @@
      <div class="content-wrapper">
         <div class="title">
             <h1>themustardcat</h1>
+            <p class="desc">Url shortener</p>
         </div>
         <form @submit.prevent="createUrl()">
             <div class="label-wrap">
@@ -50,7 +52,12 @@
             <p class="created">Your short url is: <a :href="created">{{created}}</a></p>
           </div>
      </div>
+
     </main>
+
+    <footer>
+        <p>Made with love &lt3</p>
+    </footer>
     <script src='https://cdn.jsdelivr.net/npm/vue@2'></script>
     <script src='main.js'></script>
 </body>
