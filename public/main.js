@@ -22,7 +22,7 @@ const app = new Vue({
             });
            if(response.ok){
                 const result = await response.json();
-                this.created = `http://localhost:7000/${result.slug}`;
+                this.created = `${window.location.href}${result.slug}`;
            }else if (response.status === 429) {
             this.error = 'You are sending too many requests. Try again in 30 seconds.';
           } else {
