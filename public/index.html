@@ -51,6 +51,9 @@
         <div v-if="created">
             <p class="created">Your short url is: <a :href="created">{{created}}</a></p>
           </div>
+          <div v-if="error" class="error">
+            {{error}}
+          </div>
      </div>
 
     </main>

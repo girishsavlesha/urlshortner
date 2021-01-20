@@ -25,36 +25,26 @@ app.use(express.json());
 app.use(express.static('./public'));
 
 
-app.get('/:id', async (req, res, next) => {
-    const { id: slug } = req.params;
-    try{
-        const url = await urls.findOne({ slug });
-        if(url){
-            res.redirect(url.url);
-        }
-        res.redirect(`/?error=${slug} not found`);
-    }catch(error){
-        res.redirect(`/?error=Link not found`);
-        console.error(error);
-    }
-})
+// app.get('/:id', async (req, res, next) => {
+//     const { id: slug } = req.params;
+//     try{
+//         const url = await urls.findOne({ slug });
+//         if(url){
+//             res.redirect(url.url);
+//         }
+//         res.redirect(`/?error=${slug} not found`);
+//     }catch(error){
+//         res.redirect(`/?error=Link not found`);
+//         console.error(error);
+//     }
+// })
 
 const schema = yup.object().shape({
     slug: yup.string().trim().matches(/[\w\-]/i),
     url: yup.string().trim().url().required()
 });
 
-app.use((error, req, res, next) => {
-    if(error.status){
-        res.status(error.status);
-    }else{
-        res.status(500);
-    }
-    res.json({
-        message: error.message,
-        stack: process.env.NODE_ENV === 'production' ? 'stack': error.stack
-    })
-})
+
 
 app.post('/noob', async (req, res, next) => {
     let {slug, url } = req.body;
@@ -70,7 +60,7 @@ app.post('/noob', async (req, res, next) => {
         else{
             const existing = await urls.findOne({ slug });
             if(existing){
-                throw new Error('Slug in use.')
+                throw new Error('Slug in use')
             }
         }
         slug = slug.toLowerCase();
@@ -79,7 +69,6 @@ app.post('/noob', async (req, res, next) => {
             slug,
         };
         const created = await urls.insert(newURL);
-        console.log(created);
         res.json(created);
 
     }catch(error){
@@ -87,7 +76,19 @@ app.post('/noob', async (req, res, next) => {
     }
 });
 
-app.post('/', function (req, res) {
+app.use((error, req, res, next) => {
+    if(error.status){
+        res.status(error.status);
+    }else{
+        res.status(500);
+    }
+    res.json({
+        message: error.message,
+        stack: process.env.NODE_ENV === 'production' ? 'stack': error.stack
+    })
+})
+
+app.post('/test', function (req, res) {
     res.send('POST request to the homepage')
   })
 

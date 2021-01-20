@@ -9,7 +9,6 @@ const app = new Vue({
     methods: {
         async createUrl(){
             this.error='';
-            console.log(this.url, this.slug);
             const response = await fetch('/noob', {
                 method: 'POST',
                 headers: {
@@ -20,6 +19,7 @@ const app = new Vue({
                     slug: this.slug || undefined,
                 }),
             });
+            console.log(response);
            if(response.ok){
                 const result = await response.json();
                 this.created = `${window.location.href}${result.slug}`;
