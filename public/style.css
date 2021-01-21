@@ -15,7 +15,8 @@ main a{color :#fff;text-decoration: none;}
 .title{font-size: 2rem;}
 .content-wrapper{
     color: #fff;
-    width: 70vw;
+    max-width: 70vw;
+    overflow: hidden;
 }
 .desc{font-size: 1.5rem;}
 form{
@@ -106,4 +107,28 @@ footer p{font-family: 'Source Code Pro', monospace;color: #fff;}
       100%{
         transform: scale(1) rotate(0)
       }
+}
+
+
+@media only screen and (max-width: 699px ){
+    .title{
+        font-size: 1.2rem;
+    }
+}
+
+@media only screen and (max-width: 450px ){
+    .content-wrapper{
+        max-width: 90vw;
+    }
+    .desc{
+        font-size: 1rem;
+    }
+    .title{
+        font-size: 1rem;
+    }
+    button.btnShrink{
+        width: 94px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
 }
