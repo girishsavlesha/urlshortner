@@ -78,8 +78,8 @@ app.post('/noob',slowDown({
             slug,
             url,
         });
-        if (url.includes('')) {
-            throw new Error('Jyada Shana mat bann!');
+        if (url.includes('themustardcat.herokuapp.com')) {
+            throw new Error(`you can't short same url`);
           }
         if(!slug){
             slug = nanoid(5);
