@@ -6,7 +6,8 @@ const monk = require('monk');
 
 const rateLimit = require('express-rate-limit');
 const slowDown = require('express-slow-down');
-
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
 
 require('dotenv').config();
 
@@ -45,6 +46,21 @@ const schema = yup.object().shape({
     slug: yup.string().trim().matches(/[\w\-]/i),
     url: yup.string().trim().url().required()
 });
+
+const checkJwt = jwt({
+    secret: jwksRsa.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: `https://dev-mnbc-nwo.us.auth0.com/.well-known/jwks.json`
+    }),
+  
+    // Validate the audience and the issuer.
+    audience: 'https://noob.me',
+    issuer: `https://dev-mnbc-nwo.us.auth0.com/`,
+    algorithms: ['RS256']
+  });
+  app.use(checkJwt);
 
 
 app.post('/noob',slowDown({
