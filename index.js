@@ -45,7 +45,7 @@ app.post('/',(req, res) => {
 
     var { token } = req.body;
     if(token == undefined){
-        var  token = jwt.sign({ name: 'mustard' }, process.env.JWT_key);
+        var  token = jwt.sign({ name: 'mustard' }, process.env.JWT_KEY);
     }
     res.json({
         token: token
