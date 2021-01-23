@@ -4,15 +4,27 @@ const app = new Vue({
         url: '',
         slug: '',
         error: '',
+        token: '',
         created: null,
     },
     methods: {
         async createUrl(){
             this.error='';
+            const tokenRes = await fetch('/',{
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: this.token || undefined
+                }),
+            })
+            let k = await tokenRes.json()
             const response = await fetch('/noob', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json',
+                    'Authorization': `Bearer ${k.token}`
                 },
                 body: JSON.stringify({
                     url: this.url,
@@ -32,3 +44,4 @@ const app = new Vue({
         },
     },
 });
+

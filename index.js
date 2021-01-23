@@ -3,11 +3,10 @@ const morgan = require('morgan');
 const yup = require('yup');
 const { nanoid } = require('nanoid');
 const monk = require('monk');
+var jwt = require('jsonwebtoken');
 
 const rateLimit = require('express-rate-limit');
 const slowDown = require('express-slow-down');
-// const jwt = require('express-jwt');
-// const jwksRsa = require('jwks-rsa');
 
 require('dotenv').config();
 
@@ -25,6 +24,33 @@ app.enable('trust proxy');
 app.use(morgan('tiny'));
 app.use(express.json());
 app.use(express.static('./public'));
+
+const verifyToken = function(req, res, next){
+    let authBearer = req.headers['authorization'];
+    if(authBearer){
+        const bearer = authBearer.split(' ');
+        const bearerToken = bearer[1];
+        jwt.verify(bearerToken, process.env.JWT_KEY, function(err, decoded) {
+
+            if(err){
+                console.log(err);
+                throw new Error('not authorized')
+            }
+          });
+          next();
+    }
+}
+
+app.post('/',(req, res) => {
+
+    var { token } = req.body;
+    if(token == undefined){
+        var  token = jwt.sign({ name: 'mustard' }, process.env.JWT_key);
+    }
+    res.json({
+        token: token
+    })
+})
 
 app.get('/:id', async (req, res, next) => {
     const { id: slug } = req.params;
@@ -46,23 +72,6 @@ const schema = yup.object().shape({
 });
 
 
-// const checkJwt = jwt({
-//     secret: jwksRsa.expressJwtSecret({
-//       cache: true,
-//       rateLimit: true,
-//       jwksRequestsPerMinute: 5,
-//       jwksUri: `https://dev-mnbc-nwo.us.auth0.com/.well-known/jwks.json`
-//     }),
-  
-//     // Validate the audience and the issuer.
-//     audience: 'https://noob.me',
-//     issuer: `https://dev-mnbc-nwo.us.auth0.com/`,
-//     algorithms: ['RS256']
-//   });
-//   app.use(checkJwt);
-
-
-
 app.post('/noob',slowDown({
     windowMs: 10 * 1000,
     delayAfter: 1,
@@ -70,7 +79,7 @@ app.post('/noob',slowDown({
   }), rateLimit({
     windowMs: 10 * 1000,
     max: 1,
-  }), async (req, res, next) => {
+  }),verifyToken, async (req, res, next) => {
     let {slug, url } = req.body;
     console.log(req.body);
     try{
@@ -78,6 +87,7 @@ app.post('/noob',slowDown({
             slug,
             url,
         });
+
 
         if (url.includes('themustardcat.herokuapp.com')) {
             throw new Error(`you can't short same url`);
@@ -116,8 +126,11 @@ app.use((error, req, res, next) => {
     })
 })
 
+
 const port = process.env.PORT || 7000;
 
 app.listen(port, () => {
     console.log(`listening at http://localhost:${port}`)
 })
+
+
